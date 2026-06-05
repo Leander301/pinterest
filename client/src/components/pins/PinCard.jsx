@@ -17,7 +17,8 @@ export default function PinCard({ pin, onUpdate }) {
   const handleLike = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!isAuthenticated) { toast.error('Sign in to like pins'); return; }
+    // if (!isAuthenticated) { toast.error('Sign in to like pins'); return; }
+    if (!isAuthenticated) { navigate('/login'); return; }
     setIsAnimatingHeart(true);
     setTimeout(() => setIsAnimatingHeart(false), 400);
     const prevLiked = isLiked;
@@ -35,6 +36,7 @@ export default function PinCard({ pin, onUpdate }) {
   const handleSave = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    // if (!isAuthenticated) { toast.error('Sign in to save pins'); return; }
     if (!isAuthenticated) { navigate('/login'); return; }
     const prevSaved = isSaved;
     setIsSaved(!isSaved);
