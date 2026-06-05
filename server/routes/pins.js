@@ -106,8 +106,9 @@ router.post('/', protect, upload.single('image'), [
     let imageUrl = req.body.imageUrl; // Allow URL-based images
     
     if (req.file) {
-      // Build URL for locally stored file
-      imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      // Build URL for locally stored file using tunnel URL if available
+      const baseUrl = process.env.SERVER_TUNNEL_URL || `${req.protocol}://${req.get('host')}`;
+      imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
     }
 
     if (!imageUrl) {

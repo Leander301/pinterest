@@ -46,6 +46,20 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB connected successfully'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
+// Rewrite localhost image URLs to tunnel URL
+app.use((req, res, next) => {
+  const originalJson = res.json.bind(res);
+  res.json = (data) => {
+    const tunnelUrl = process.env.SERVER_TUNNEL_URL || `http://localhost:${process.env.PORT || 5000}`;
+    const str = JSON.stringify(data).replace(
+      /http:\/\/localhost:\d+\/uploads\//g,
+      `${tunnelUrl}/uploads/`
+    );
+    return originalJson(JSON.parse(str));
+  };
+  next();
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
